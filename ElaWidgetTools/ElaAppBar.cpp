@@ -717,7 +717,6 @@ void ElaAppBar::mousePressEvent(QMouseEvent* event)
     Q_D(ElaAppBar);
     if (event->button() == Qt::LeftButton)
     {
-        // 检查是否点击在可拖动区域（不在按钮或自定义控件上）
         if (d->_containsCursorToItem(this))
         {
             d->_isDragging = true;
@@ -726,6 +725,7 @@ void ElaAppBar::mousePressEvent(QMouseEvent* event)
 #else
             d->_dragStartPos = event->globalPos() - window()->frameGeometry().topLeft();
 #endif
+            grabMouse();
             event->accept();
             return;
         }
@@ -754,6 +754,10 @@ void ElaAppBar::mouseReleaseEvent(QMouseEvent* event)
     Q_D(ElaAppBar);
     if (event->button() == Qt::LeftButton)
     {
+        if (d->_isDragging)
+        {
+            releaseMouse();
+        }
         d->_isDragging = false;
         event->accept();
         return;
