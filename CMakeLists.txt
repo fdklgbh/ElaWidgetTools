@@ -1,4 +1,8 @@
-﻿cmake_minimum_required(VERSION 3.5)
+﻿cmake_minimum_required(VERSION 3.10...3.30)
+
+if (NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM)
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
 
 project(ElaFramework VERSION 0.1 LANGUAGES CXX)
 
@@ -17,20 +21,38 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
-#在这里配置QT路径 例如 D:/Qt/6.6.2/msvc2019_64 D:/Qt/5.15.2/msvc2019_64 /home/liniyous/Qt/5.15.2/gcc_64
-SET(QT_SDK_DIR D:/Qt/5.15.2/msvc2019_64 CACHE PATH "QT SDK DIR" FORCE)
-message("在CMAKE中配置 QT_SDK_DIR 选项指定QT路径; 当前路径: ${QT_SDK_DIR}")
+# 配置 QT 路径，三种方式任选其一（优先级从高到低）：
+#   1) 命令行 -DQT_SDK_DIR=/path/to/Qt
+#   2) 命令行 -DCMAKE_PREFIX_PATH=/path/to/Qt （CMake 标准方式，Qt Creator/CLion 默认）
+#   3) 直接修改下方默认值
+# 示例: D:/Qt/6.10.3/msvc2022_64
+if (NOT CMAKE_PREFIX_PATH AND DEFINED ENV{CMAKE_PREFIX_PATH})
+    file(TO_CMAKE_PATH "$ENV{CMAKE_PREFIX_PATH}" CMAKE_PREFIX_PATH)
+endif()
+
+if (QT_SDK_DIR)
+    set(_qt_path_source "QT_SDK_DIR=${QT_SDK_DIR}")
+elseif (CMAKE_PREFIX_PATH)
+    set(_qt_path_source "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
+    list(GET CMAKE_PREFIX_PATH 0 QT_SDK_DIR)
+else()
+    set(QT_SDK_DIR "D:/Qt/6.10.3/msvc2022_64")
+    set(_qt_path_source "QT_SDK_DIR=${QT_SDK_DIR} (默认值)")
+endif()
+message("当前 QT 路径来源: ${_qt_path_source}")
+unset(_qt_path_source)
 SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/Install CACHE PATH "Installation path" FORCE)
 
-option(BUILD_ELAPACKETIO "Build ElaPacketIO" OFF)
+set(BUILD_ELAPACKETIO OFF CACHE BOOL "Build ElaPacketIO" FORCE)
 list(APPEND CMAKE_PREFIX_PATH ${QT_SDK_DIR})
+list(REMOVE_DUPLICATES CMAKE_PREFIX_PATH)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-if (${QT_VERSION} VERSION_GREATER 6.7.0 OR ${QT_VERSION} VERSION_LESS 5.12.0)
-    message("你当前使用的QT版本不在维护范围内！可能出现编译失败或使用时崩溃问题，推荐QT版本为QT5.15.2 QT6.6.2 QT6.6.3！请知悉~")
-    message("The QT version you are currently using is no longer under maintenance! There may be issues such as compilation failures or crashes during use. The recommended QT versions are QT5.15.2, QT6.6.2, and QT6.6.3! Please be advised")
+if (QT_VERSION VERSION_GREATER_EQUAL 6.10)
+    set(QT_NO_PRIVATE_MODULE_WARNING ON)
+    find_package(Qt6 REQUIRED COMPONENTS WidgetsPrivate)
 endif ()
 
 if (${QT_VERSION} VERSION_GREATER_EQUAL 6.5.3 AND ${QT_VERSION} VERSION_LESS_EQUAL 6.6.1)

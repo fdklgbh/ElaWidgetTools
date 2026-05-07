@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+﻿cmake_minimum_required(VERSION 3.10...3.30)
 
 if (APPLE)
     project(ElaWidgetTools VERSION 2.0.0 LANGUAGES CXX OBJCXX)
@@ -14,7 +14,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRe
 endif()
 
 add_definitions(-DELAWIDGETTOOLS_LIBRARY)
-option(ELAWIDGETTOOLS_BUILD_STATIC_LIB "Build static library." OFF)
+set(ELAWIDGETTOOLS_BUILD_STATIC_LIB ON CACHE BOOL "Build static library" FORCE)
 
 if (APPLE)
     FILE(GLOB ORIGIN *.h *.cpp *.mm)
@@ -50,6 +50,7 @@ add_library(${PROJECT_NAME} ${LIB_TYPE}
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 if (QT_VERSION_MAJOR EQUAL 6)
+    set(QT_NO_PRIVATE_MODULE_WARNING ON)
     find_package(Qt6 REQUIRED COMPONENTS WidgetsPrivate)
 endif ()
 
