@@ -4,6 +4,8 @@
 #include "ElaWindow.h"
 
 #include <QMainWindow>
+class QToolBar;
+class ElaRibbonBar;
 class T_Home;
 class T_Icon;
 class T_ElaScreen;
@@ -34,7 +36,11 @@ public:
 
     void initWindow();
     void initEdgeLayout();
+    void initRibbon();
     void initContent();
+
+    void setRibbonMode(bool enabled);
+    bool isRibbonMode() const { return _isRibbonMode; }
 
 protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
@@ -66,5 +72,11 @@ private:
     QString _viewKey{""};
     QString _aboutKey{""};
     QString _settingKey{""};
+
+    QWidget* _menuBarWrapper{nullptr};
+    QWidget* _ribbonTabBarWrapper{nullptr};
+    QToolBar* _ribbonToolBar{nullptr};
+    ElaRibbonBar* _ribbonBar{nullptr};
+    bool _isRibbonMode{false};
 };
 #endif // MAINWINDOW_H

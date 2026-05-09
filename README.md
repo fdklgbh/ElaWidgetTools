@@ -139,6 +139,9 @@
 | ElaMenuBar             | 菜单栏          | 窗口顶部菜单栏                      |
 | ElaToolBar             | 工具栏          | 可停靠工具栏，支持溢出                  |
 | ElaCommandBar          | 命令栏          | 带溢出菜单，图标+文字按钮，独立Hover/Press  |
+| ElaRibbonBar           | Ribbon 主容器   | Office 风格，Tab 标签条 + 内容堆栈，支持折叠/展开动画、鼠标离开自动隐藏、右键菜单固定、可绑定外部 TabBar |
+| ElaRibbonTabBar        | Ribbon 标签条   | 可独立放入 AppBar 标题栏的 Tab 标签条，主题主色高亮、Hover 反馈、再次点击触发折叠 |
+| ElaRibbonGroup         | Ribbon 分组    | 承载工具按钮与任意自定义控件，底部 fieldset legend 风格标题与右侧分隔线 |
 | ElaStatusBar           | 状态栏          | 窗口底部状态信息栏                    |
 | ElaContentDialog       | 带遮罩的对话框      | 全窗口遮罩+居中对话框                  |
 | ElaDialog              | 对话框          | 标准无边框对话框                     |

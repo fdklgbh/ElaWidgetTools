@@ -89,6 +89,11 @@
         <modify-function signature="ElaApplication(ElaApplicationPrivate&amp;,ElaApplication*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaAutoComplete">
+        <modify-function signature="ElaAutoComplete(ElaAutoCompletePrivate&amp;,ElaAutoComplete*)" remove="all"/>
+        <enum-type name="MatchMode"/>
+    </object-type>
+
     <object-type name="ElaBreadcrumbBar">
         <modify-function signature="ElaBreadcrumbBar(ElaBreadcrumbBarPrivate&amp;,ElaBreadcrumbBar*)" remove="all"/>
     </object-type>
@@ -104,6 +109,12 @@
     <object-type name="ElaCaptcha">
         <modify-function signature="ElaCaptcha(ElaCaptchaPrivate&amp;,ElaCaptcha*)" remove="all"/>
         <enum-type name="InputMode"/>
+    </object-type>
+
+    <object-type name="ElaChatBubble">
+        <modify-function signature="ElaChatBubble(ElaChatBubblePrivate&amp;,ElaChatBubble*)" remove="all"/>
+        <enum-type name="BubbleDirection"/>
+        <enum-type name="MessageStatus"/>
     </object-type>
 
     <object-type name="ElaCheckBox"/>
@@ -129,8 +140,16 @@
         <modify-function signature="ElaContentDialog(ElaContentDialogPrivate&amp;,ElaContentDialog*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaCopyButton">
+        <modify-function signature="ElaCopyButton(ElaCopyButtonPrivate&amp;,ElaCopyButton*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaCountdown">
         <modify-function signature="ElaCountdown(ElaCountdownPrivate&amp;,ElaCountdown*)" remove="all"/>
+    </object-type>
+
+    <object-type name="ElaDashboardGauge">
+        <modify-function signature="ElaDashboardGauge(ElaDashboardGaugePrivate&amp;,ElaDashboardGauge*)" remove="all"/>
     </object-type>
 
     <object-type name="ElaDialog">
@@ -163,6 +182,10 @@
         <modify-function signature="ElaDxgiManager(ElaDxgiManagerPrivate&amp;,ElaDxgiManager*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaEmojiPicker">
+        <modify-function signature="ElaEmojiPicker(ElaEmojiPickerPrivate&amp;,ElaEmojiPicker*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaEvent">
         <modify-function signature="ElaEvent(QObject*)" remove="all"/>
         <modify-function signature="ElaEvent(QWidget*)" remove="all"/>
@@ -172,6 +195,11 @@
     <object-type name="ElaExpander">
         <modify-function signature="ElaExpander(ElaExpanderPrivate&amp;,ElaExpander*)" remove="all"/>
         <enum-type name="ExpandDirection"/>
+    </object-type>
+
+    <object-type name="ElaFloatButton">
+        <modify-function signature="ElaFloatButton(ElaFloatButtonPrivate&amp;,ElaFloatButton*)" remove="all"/>
+        <enum-type name="Position"/>
     </object-type>
 
     <object-type name="ElaFlowLayout">
@@ -216,6 +244,10 @@
         <enum-type name="Severity"/>
     </object-type>
 
+    <object-type name="ElaInfoBar">
+        <modify-function signature="ElaInfoBar(ElaInfoBarPrivate&amp;,ElaInfoBar*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaInputDialog">
         <modify-function signature="ElaInputDialog(ElaInputDialogPrivate&amp;,ElaInputDialog*)" remove="all"/>
     </object-type>
@@ -257,6 +289,7 @@
     <object-type name="ElaMenuBar"/>
 
     <object-type name="ElaMessageBar">
+        <modify-function signature="ElaMessageBar(QWidget*)" remove="all"/>
         <modify-function signature="ElaMessageBar(ElaMessageBarPrivate&amp;,ElaMessageBar*)" remove="all"/>
     </object-type>
 
@@ -338,6 +371,11 @@
         <modify-function signature="ElaPushButton(ElaPushButtonPrivate&amp;,ElaPushButton*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaQRCode">
+        <modify-function signature="ElaQRCode(ElaQRCodePrivate&amp;,ElaQRCode*)" remove="all"/>
+        <enum-type name="ErrorCorrectionLevel"/>
+    </object-type>
+
     <object-type name="ElaRadioButton">
         <modify-function signature="ElaRadioButton(ElaRadioButtonPrivate&amp;,ElaRadioButton*)" remove="all"/>
     </object-type>
@@ -350,12 +388,30 @@
         <modify-function signature="ElaReminderCard(ElaReminderCardPrivate&amp;,ElaReminderCard*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaRibbonBar">
+        <modify-function signature="ElaRibbonBar(ElaRibbonBarPrivate&amp;,ElaRibbonBar*)" remove="all"/>
+    </object-type>
+
+    <object-type name="ElaRibbonGroup">
+        <modify-function signature="ElaRibbonGroup(ElaRibbonGroupPrivate&amp;,ElaRibbonGroup*)" remove="all"/>
+        <enum-type name="ButtonSize"/>
+    </object-type>
+
+    <object-type name="ElaRibbonTabBar">
+        <modify-function signature="ElaRibbonTabBar(ElaRibbonTabBarPrivate&amp;,ElaRibbonTabBar*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaRoller">
         <modify-function signature="ElaRoller(ElaRollerPrivate&amp;,ElaRoller*)" remove="all"/>
     </object-type>
 
     <object-type name="ElaRollerPicker">
         <modify-function signature="ElaRollerPicker(ElaRollerPickerPrivate&amp;,ElaRollerPicker*)" remove="all"/>
+    </object-type>
+
+    <object-type name="ElaRouter">
+        <modify-function signature="ElaRouter(QObject*)" remove="all"/>
+        <modify-function signature="ElaRouter(QWidget*)" remove="all"/>
     </object-type>
 
     <object-type name="ElaScreenCaptureManager">
@@ -395,6 +451,12 @@
 
     <object-type name="ElaSlider"/>
 
+    <object-type name="ElaSnackbar">
+        <modify-function signature="ElaSnackbar(QWidget*)" remove="all"/>
+        <modify-function signature="ElaSnackbar(ElaSnackbarPrivate&amp;,ElaSnackbar*)" remove="all"/>
+        <enum-type name="SnackbarType"/>
+    </object-type>
+
     <object-type name="ElaSpinBox">
         <modify-function signature="ElaSpinBox(ElaSpinBoxPrivate&amp;,ElaSpinBox*)" remove="all"/>
     </object-type>
@@ -405,6 +467,10 @@
 
     <object-type name="ElaSplitButton">
         <modify-function signature="ElaSplitButton(ElaSplitButtonPrivate&amp;,ElaSplitButton*)" remove="all"/>
+    </object-type>
+
+    <object-type name="ElaSplitter">
+        <modify-function signature="ElaSplitter(ElaSplitterPrivate&amp;,ElaSplitter*)" remove="all"/>
     </object-type>
 
     <object-type name="ElaSpotlight">
@@ -452,6 +518,10 @@
         <enum-type name="TailPosition"/>
     </object-type>
 
+    <object-type name="ElaTerminalWidget">
+        <modify-function signature="ElaTerminalWidget(ElaTerminalWidgetPrivate&amp;,ElaTerminalWidget*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaText">
         <modify-function signature="ElaText(ElaTextPrivate&amp;,ElaText*)" remove="all"/>
     </object-type>
@@ -496,8 +566,16 @@
         <modify-function signature="ElaTransfer(ElaTransferPrivate&amp;,ElaTransfer*)" remove="all"/>
     </object-type>
 
+    <object-type name="ElaTreeSelect">
+        <modify-function signature="ElaTreeSelect(ElaTreeSelectPrivate&amp;,ElaTreeSelect*)" remove="all"/>
+    </object-type>
+
     <object-type name="ElaTreeView">
         <modify-function signature="ElaTreeView(ElaTreeViewPrivate&amp;,ElaTreeView*)" remove="all"/>
+    </object-type>
+
+    <object-type name="ElaUploadArea">
+        <modify-function signature="ElaUploadArea(ElaUploadAreaPrivate&amp;,ElaUploadArea*)" remove="all"/>
     </object-type>
 
     <object-type name="ElaVirtualList">

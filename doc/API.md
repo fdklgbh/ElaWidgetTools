@@ -2,7 +2,7 @@
 
 > 本文档由 `scripts/generate_docs.py` 自动生成，请勿手动编辑。
 >
-> 共 **121** 个公开组件
+> 共 **124** 个公开组件
 
 ## 目录
 
@@ -83,6 +83,9 @@
 - [ElaRadioButton](#elaradiobutton)
 - [ElaRatingControl](#elaratingcontrol)
 - [ElaReminderCard](#elaremindercard)
+- [ElaRibbonBar](#elaribbonbar)
+- [ElaRibbonGroup](#elaribbongroup)
+- [ElaRibbonTabBar](#elaribbontabbar)
 - [ElaRoller](#elaroller)
 - [ElaRollerPicker](#elarollerpicker)
 - [ElaRouter](#elarouter)
@@ -1995,6 +1998,83 @@
 ### 方法
 
 - `void setCardPixmapSize(int width, int height)`
+
+---
+
+## ElaRibbonBar
+
+**继承**: `QWidget` | **头文件**: `ElaRibbonBar.h`
+
+### 属性
+
+| 类型 | 名称 | 读写 |
+|------|------|------|
+| `int` | `CurrentIndex` | get/set |
+
+### 方法
+
+- `void bindTabBar(ElaRibbonTabBar* tabBar)`
+- `ElaRibbonTabBar* tabBar()`
+- `QWidget* addTab(const QString& title)`
+- `ElaRibbonGroup* addGroup(QWidget* page, const QString& title)`
+- `int tabCount()`
+- `QString tabText(int index)`
+- `void setCollapsed(bool collapsed)`
+- `bool isCollapsed()`
+- `void setPinned(bool pinned)`
+- `bool isPinned()`
+- `void setAnimationDuration(int durationMs)`
+- `int getAnimationDuration()`
+- `void showPinContextMenu(const QPoint& globalPos)`
+
+### 信号
+
+- `tabClicked(int index)`
+- `collapsedChanged(bool collapsed)`
+- `pinnedChanged(bool pinned)`
+
+---
+
+## ElaRibbonGroup
+
+**继承**: `QWidget` | **头文件**: `ElaRibbonGroup.h`
+
+### 枚举
+
+**ButtonSize**: `Large`, `Small`
+
+### 方法
+
+- `void setTitle(const QString& title)`
+- `QString getTitle()`
+- `ElaToolButton* addToolButton(ElaIconType::IconName icon, const QString& text, ButtonSize size = Large)`
+- `void addWidget(QWidget* widget)`
+
+---
+
+## ElaRibbonTabBar
+
+**继承**: `QWidget` | **头文件**: `ElaRibbonTabBar.h`
+
+### 属性
+
+| 类型 | 名称 | 读写 |
+|------|------|------|
+| `int` | `CurrentIndex` | get/set |
+
+### 方法
+
+- `int appendTab(const QString& title)`
+- `void removeTab(int index)`
+- `void clear()`
+- `int tabCount()`
+- `QString tabText(int index)`
+- `void setTabText(int index, const QString& title)`
+
+### 信号
+
+- `tabClicked(int index)`
+- `tabReclicked(int index)`
 
 ---
 

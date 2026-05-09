@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 
+#include "ElaCheckBox.h"
 #include "ElaContentDialog.h"
 #include "ElaDockWidget.h"
 #include "ElaEventBus.h"
@@ -9,10 +10,14 @@
 #include "ElaNavigationRouter.h"
 #include "ElaProgressBar.h"
 #include "ElaProgressRing.h"
+#include "ElaSlider.h"
 #include "ElaStatusBar.h"
 #include "ElaSuggestBox.h"
 #include "ElaText.h"
 #include "ElaTheme.h"
+#include "ElaRibbonBar.h"
+#include "ElaRibbonGroup.h"
+#include "ElaRibbonTabBar.h"
 #include "ElaToolBar.h"
 #include "ElaToolButton.h"
 #include "T_About.h"
@@ -24,7 +29,6 @@
 #include "T_TableView.h"
 #include "T_TableWidget.h"
 #include "T_TreeView.h"
-#include <QDebug>
 #include <QGraphicsView>
 #include <QHBoxLayout>
 #include <QMouseEvent>
@@ -54,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	//额外布局
 	initEdgeLayout();
+
+	initRibbon();
 
 	//中心窗口
 	initContent();
@@ -238,6 +244,7 @@ void MainWindow::initEdgeLayout()
 	customLayout->addStretch();
 	// this->setMenuBar(menuBar);
 	this->setCustomWidget(ElaAppBarType::MiddleArea, customWidget);
+	_menuBarWrapper = customWidget;
 
 	menuBar->addElaIconAction(ElaIconType::AtomSimple, "动作菜单");
 	ElaMenu *iconMenu = menuBar->addMenu(ElaIconType::Aperture, "图标菜单");
@@ -314,6 +321,15 @@ void MainWindow::initEdgeLayout()
 	toolBar->addWidget(toolButton12);
 	QAction *test = new QAction(this);
 	test->setMenu(new QMenu(this));
+
+	toolBar->addSeparator();
+	ElaCheckBox *ribbonToggle = new ElaCheckBox("启用 Ribbon", this);
+	ribbonToggle->setChecked(false);
+	connect(ribbonToggle, &QCheckBox::toggled, this, [=](bool checked)
+	{
+		setRibbonMode(checked);
+	});
+	toolBar->addWidget(ribbonToggle);
 
 	ElaProgressBar *progressBar = new ElaProgressBar(this);
 	progressBar->setMinimum(0);
@@ -459,6 +475,198 @@ void MainWindow::initContent()
 
 	_windowSuggestBox->addSuggestion(getNavigationSuggestDataList());
 	qDebug() << "已注册的事件列表" << ElaEventBus::getInstance()->getRegisteredEventsName();
+}
+
+void MainWindow::initRibbon()
+{
+	ElaRibbonTabBar *ribbonTabBar = new ElaRibbonTabBar(this);
+	QWidget *tabBarWrapper = new QWidget(this);
+	tabBarWrapper->setFixedWidth(560);
+	QHBoxLayout *tabBarLayout = new QHBoxLayout(tabBarWrapper);
+	tabBarLayout->setContentsMargins(0, 0, 0, 0);
+	tabBarLayout->setSpacing(0);
+	tabBarLayout->addWidget(ribbonTabBar);
+	tabBarLayout->addStretch();
+	tabBarWrapper->hide();
+	_ribbonTabBarWrapper = tabBarWrapper;
+
+	ElaRibbonBar *ribbonBar = new ElaRibbonBar(this);
+	ribbonBar->bindTabBar(ribbonTabBar);
+	ribbonBar->setAnimationDuration(500);
+	_ribbonBar = ribbonBar;
+
+	QWidget *homePage = ribbonBar->addTab("开始");
+	ElaRibbonGroup *clipGroup = ribbonBar->addGroup(homePage, "剪贴板");
+	clipGroup->addToolButton(ElaIconType::Paste, "粘贴");
+	clipGroup->addToolButton(ElaIconType::Scissors, "剪切");
+	clipGroup->addToolButton(ElaIconType::Copy, "复制");
+
+	ElaRibbonGroup *fontGroup = ribbonBar->addGroup(homePage, "字体");
+	fontGroup->addToolButton(ElaIconType::Bold, "加粗");
+	fontGroup->addToolButton(ElaIconType::Italic, "斜体");
+	fontGroup->addToolButton(ElaIconType::Underline, "下划线");
+	fontGroup->addToolButton(ElaIconType::Highlighter, "高亮");
+
+	ElaRibbonGroup *paragraphGroup = ribbonBar->addGroup(homePage, "段落");
+	paragraphGroup->addToolButton(ElaIconType::AlignLeft, "左对齐");
+	paragraphGroup->addToolButton(ElaIconType::AlignCenter, "居中");
+	paragraphGroup->addToolButton(ElaIconType::AlignRight, "右对齐");
+	paragraphGroup->addToolButton(ElaIconType::ListUl, "项目符号");
+
+	ElaRibbonGroup *editGroup = ribbonBar->addGroup(homePage, "编辑");
+	editGroup->addToolButton(ElaIconType::PenToSquare, "修改");
+	editGroup->addToolButton(ElaIconType::Eraser, "清除");
+
+	QWidget *insertPage = ribbonBar->addTab("插入");
+	ElaRibbonGroup *tableGroup = ribbonBar->addGroup(insertPage, "表格");
+	tableGroup->addToolButton(ElaIconType::Table, "表格");
+
+	ElaRibbonGroup *illustrationGroup = ribbonBar->addGroup(insertPage, "插图");
+	illustrationGroup->addToolButton(ElaIconType::Image, "图片");
+	illustrationGroup->addToolButton(ElaIconType::Camera, "拍照");
+	illustrationGroup->addToolButton(ElaIconType::Palette, "形状");
+
+	ElaRibbonGroup *linkGroup = ribbonBar->addGroup(insertPage, "链接");
+	linkGroup->addToolButton(ElaIconType::Link, "超链接");
+	linkGroup->addToolButton(ElaIconType::Bookmark, "书签");
+
+	ElaRibbonGroup *mediaGroup = ribbonBar->addGroup(insertPage, "媒体");
+	mediaGroup->addToolButton(ElaIconType::Music, "音频");
+	mediaGroup->addToolButton(ElaIconType::Video, "视频");
+
+	QWidget *designPage = ribbonBar->addTab("设计");
+	ElaRibbonGroup *themeGroup = ribbonBar->addGroup(designPage, "主题");
+	themeGroup->addToolButton(ElaIconType::Sun, "明亮");
+	themeGroup->addToolButton(ElaIconType::Moon, "暗色");
+
+	ElaRibbonGroup *typoGroup = ribbonBar->addGroup(designPage, "排版");
+	typoGroup->addToolButton(ElaIconType::TextSize, "字号");
+	typoGroup->addToolButton(ElaIconType::FontCase, "字体");
+	typoGroup->addToolButton(ElaIconType::Ruler, "页边距");
+
+	QWidget *reviewPage = ribbonBar->addTab("审阅");
+	ElaRibbonGroup *proofGroup = ribbonBar->addGroup(reviewPage, "校对");
+	proofGroup->addToolButton(ElaIconType::CircleCheck, "拼写");
+	proofGroup->addToolButton(ElaIconType::CircleQuestion, "字数");
+
+	ElaRibbonGroup *commentGroup = ribbonBar->addGroup(reviewPage, "评论");
+	commentGroup->addToolButton(ElaIconType::Comment, "新建");
+	commentGroup->addToolButton(ElaIconType::Comments, "查看");
+	commentGroup->addToolButton(ElaIconType::Reply, "回复");
+
+	QWidget *viewPage = ribbonBar->addTab("视图");
+	ElaRibbonGroup *zoomGroup = ribbonBar->addGroup(viewPage, "缩放");
+	zoomGroup->addToolButton(ElaIconType::Plus, "放大");
+	zoomGroup->addToolButton(ElaIconType::Minus, "缩小");
+
+	ElaRibbonGroup *displayGroup = ribbonBar->addGroup(viewPage, "显示");
+	displayGroup->addToolButton(ElaIconType::Eye, "网格");
+	displayGroup->addToolButton(ElaIconType::EyeSlash, "标尺");
+
+	ElaRibbonGroup *prefsGroup = ribbonBar->addGroup(viewPage, "显示设置");
+	QWidget *checkColumn = new QWidget(this);
+	QVBoxLayout *checkColumnLayout = new QVBoxLayout(checkColumn);
+	checkColumnLayout->setContentsMargins(4, 6, 4, 6);
+	checkColumnLayout->setSpacing(8);
+	checkColumnLayout->addWidget(new ElaCheckBox("网格线", this));
+	checkColumnLayout->addWidget(new ElaCheckBox("标尺", this));
+	checkColumnLayout->addWidget(new ElaCheckBox("导航栏", this));
+	prefsGroup->addWidget(checkColumn);
+
+	QWidget *zoomColumn = new QWidget(this);
+	QVBoxLayout *zoomColumnLayout = new QVBoxLayout(zoomColumn);
+	zoomColumnLayout->setContentsMargins(4, 4, 4, 4);
+	zoomColumnLayout->setSpacing(2);
+	ElaText *zoomLabel = new ElaText("缩放级别", this);
+	zoomLabel->setTextPixelSize(11);
+	ElaSlider *zoomSlider = new ElaSlider(Qt::Horizontal, this);
+	zoomSlider->setRange(50, 200);
+	zoomSlider->setValue(100);
+	zoomSlider->setFixedWidth(140);
+	ElaText *zoomValue = new ElaText("100%", this);
+	zoomValue->setTextPixelSize(11);
+	zoomValue->setAlignment(Qt::AlignCenter);
+	connect(zoomSlider, &QSlider::valueChanged, zoomValue, [=](int v)
+	{
+		zoomValue->setText(QString("%1%").arg(v));
+	});
+	zoomColumnLayout->addWidget(zoomLabel);
+	zoomColumnLayout->addWidget(zoomSlider);
+	zoomColumnLayout->addWidget(zoomValue);
+	prefsGroup->addWidget(zoomColumn);
+
+	ElaToolBar *ribbonToolBar = new ElaToolBar("Ribbon", this);
+	ribbonToolBar->setObjectName("RibbonToolBar");
+	ribbonToolBar->setMovable(false);
+	ribbonToolBar->setFloatable(false);
+	ribbonToolBar->setToolBarSpacing(0);
+	ribbonToolBar->layout()->setContentsMargins(0, 0, 0, 0);
+	ribbonToolBar->addWidget(ribbonBar);
+
+	QToolBar *existingTopBar = nullptr;
+	for (QObject *child: this->children())
+	{
+		QToolBar *bar = qobject_cast<QToolBar *>(child);
+		if (bar && bar != ribbonToolBar && this->toolBarArea(bar) == Qt::TopToolBarArea)
+		{
+			existingTopBar = bar;
+			break;
+		}
+	}
+	if (existingTopBar)
+	{
+		insertToolBar(existingTopBar, ribbonToolBar);
+		insertToolBarBreak(existingTopBar);
+	}
+	else
+	{
+		addToolBar(Qt::TopToolBarArea, ribbonToolBar);
+	}
+	ribbonToolBar->hide();
+	_ribbonToolBar = ribbonToolBar;
+
+	ribbonToolBar->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ribbonToolBar, &QWidget::customContextMenuRequested, this, [=](const QPoint &pos)
+	{
+		ribbonBar->showPinContextMenu(ribbonToolBar->mapToGlobal(pos));
+	});
+}
+
+void MainWindow::setRibbonMode(bool enabled)
+{
+	_isRibbonMode = enabled;
+	if (enabled)
+	{
+		if (_menuBarWrapper)
+		{
+			_menuBarWrapper->hide();
+		}
+		if (_ribbonTabBarWrapper)
+		{
+			_ribbonTabBarWrapper->show();
+			this->setCustomWidget(ElaAppBarType::MiddleArea, _ribbonTabBarWrapper);
+		}
+		if (_ribbonToolBar)
+		{
+			_ribbonToolBar->show();
+		}
+	}
+	else
+	{
+		if (_ribbonTabBarWrapper)
+		{
+			_ribbonTabBarWrapper->hide();
+		}
+		if (_ribbonToolBar)
+		{
+			_ribbonToolBar->hide();
+		}
+		if (_menuBarWrapper)
+		{
+			_menuBarWrapper->show();
+			this->setCustomWidget(ElaAppBarType::MiddleArea, _menuBarWrapper);
+		}
+	}
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
