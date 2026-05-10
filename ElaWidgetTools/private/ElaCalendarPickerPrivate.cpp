@@ -32,6 +32,7 @@ void ElaCalendarPickerPrivate::onCalendarSelectedDateChanged()
 {
     Q_Q(ElaCalendarPicker);
     Q_EMIT q->selectedDateChanged(_calendar->getSelectedDate());
+    q->update();
     if (_calendarPickerContainer->isVisible())
     {
         _calendarPickerContainer->hide();
