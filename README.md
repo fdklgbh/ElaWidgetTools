@@ -4,7 +4,7 @@
 
 本项目基于 [Liniyous/ElaWidgetTools](https://github.com/Liniyous/ElaWidgetTools) 独立修改发展而来。
 
-基于 Qt Widget 开发的 FluentUI 风格组件库，提供不限于组件的常用集成功能。目前共有 **100+** 个公开组件，涵盖基础控件、数据展示、导航布局、弹出交互、编辑输入等类别。完整 API 文档见 [doc/API.md](doc/API.md)。
+基于 Qt Widget 开发的 FluentUI 风格组件库，提供不限于组件的常用集成功能。目前共有 **124** 个公开组件，涵盖基础控件、数据展示、导航布局、弹出交互、编辑输入等类别。组件使用文档见 [doc/USAGE.md](doc/USAGE.md)，完整 API 文档见 [doc/API.md](doc/API.md)。
 
 ## 支持平台
 
@@ -45,7 +45,7 @@
 | ElaNavigationRouter    | 路由跳转         | 前进/后退导航历史管理                  |
 | ElaRouter              | 声明式路由器       | 路由表/守卫/动态路由/懒加载/嵌套路由，类 Vue Router |
 | ElaEventBus            | 事件总线         | 跨组件解耦通信                      |
-| ElaIcon                | 图标           | 3500+ FluentUI 图标           |
+| ElaIcon                | 图标           | 3200+ FluentUI 图标           |
 | ElaLog                 | 消息日志         | 分级日志输出与管理                    |
 
 ### 按钮与输入
@@ -188,6 +188,7 @@
 | ElaGraphicsScene       | 高级场景         | 大量实用API，节点管理                 |
 | ElaGraphicsView        | 高级视图         | 按键缩放、拖动，画布操作                 |
 | ElaGraphicsItem        | 高级图元         | 大量实用API，自定义绘制                |
+| ElaGraphicsLineItem    | 高级连线图元       | 连接两个图元端口或两个坐标点的连线            |
 | ElaPromotionView       | 促销卡片视窗       | 多卡片轮播展示容器                    |
 | ElaVirtualList         | 虚拟滚动列表       | 万级数据量流畅滚动，批量布局+统一行高优化         |
 
@@ -214,11 +215,12 @@
 | ElaScreenCaptureManager| 屏幕采集         | macOS ScreenCaptureKit      |
 | ElaExponentialBlur     | 指数模糊         | 高性能图像模糊处理                    |
 
-## API 文档
+## 文档
 
-完整的组件 API 文档由脚本自动生成，见 [doc/API.md](doc/API.md)。
+- 使用文档：[doc/USAGE.md](doc/USAGE.md)，按功能分类介绍全部组件的用途、基本用法示例、常用 API 与注意事项。
+- API 文档：[doc/API.md](doc/API.md)，由脚本自动生成，包含全部公开组件的完整 API 签名。
 
-重新生成：
+重新生成 API 文档：
 ```bash
 python3 scripts/generate_docs.py
 ```
@@ -235,11 +237,13 @@ pip install PySide6 shiboken6 shiboken6-generator
 
 ### 构建绑定
 
+> 注意：当前 `ElaWidgetTools/CMakeLists.txt` 第 17 行使用 `FORCE` 将 `ELAWIDGETTOOLS_BUILD_STATIC_LIB` 固定为 `ON`，命令行传入的 `-DELAWIDGETTOOLS_BUILD_STATIC_LIB=OFF` 不会生效。构建动态库前需先将该行改为不带 `FORCE` 的默认值。
+
 ```bash
 # 生成 typesystem 和 global.h
 python3 scripts/generate_bindings.py
 
-# 构建 ElaWidgetTools 动态库
+# 构建 ElaWidgetTools 动态库（需先按上方说明修改 CMakeLists.txt）
 cmake -B build -DELAWIDGETTOOLS_BUILD_STATIC_LIB=OFF -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target ElaWidgetTools
 
