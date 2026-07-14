@@ -6,6 +6,7 @@
 #include "ElaDef.h"
 class ElaVirtualList;
 class ElaVirtualListStyle;
+class QStandardItemModel;
 class ElaVirtualListPrivate : public QObject
 {
     Q_OBJECT
@@ -21,6 +22,11 @@ private:
     ElaThemeType::ThemeMode _themeMode;
     ElaVirtualListStyle* _listViewStyle{nullptr};
     int _itemCount{0};
+    QStandardItemModel* _internalModel{nullptr};
+    int _lastRequestStart{-1};
+    int _lastRequestEnd{-1};
+
+    void _requestVisibleData();
 };
 
 #endif // ELAVIRTUALLISTPRIVATE_H

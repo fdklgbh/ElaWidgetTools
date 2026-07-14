@@ -9,7 +9,7 @@ class ELA_EXPORT ElaCalendar : public QWidget
 {
     Q_OBJECT
     Q_Q_CREATE(ElaCalendar)
-    Q_PROPERTY_CREATE_Q_H(int, BorderRaiuds)
+    Q_PROPERTY_CREATE_Q_H(int, BorderRadius)
     Q_PROPERTY_CREATE_Q_H(QDate, SelectedDate)
     Q_PROPERTY_CREATE_Q_H(QDate, MinimumDate)
     Q_PROPERTY_CREATE_Q_H(QDate, MaximumDate)

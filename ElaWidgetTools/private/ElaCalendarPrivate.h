@@ -15,7 +15,7 @@ class ElaCalendarPrivate : public QObject
 {
     Q_OBJECT
     Q_D_CREATE(ElaCalendar)
-    Q_PROPERTY_CREATE_D(int, BorderRaiuds)
+    Q_PROPERTY_CREATE_D(int, BorderRadius)
     Q_PROPERTY_CREATE_D(QDate, SelectedDate)
     Q_PROPERTY_CREATE(qreal, ZoomRatio)
     Q_PROPERTY_CREATE(qreal, PixOpacity)

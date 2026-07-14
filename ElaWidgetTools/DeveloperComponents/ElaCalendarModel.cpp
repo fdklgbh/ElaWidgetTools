@@ -14,8 +14,11 @@ ElaCalendarModel::~ElaCalendarModel()
 
 void ElaCalendarModel::setMinimumDate(QDate minimudate)
 {
+    // 日期范围变化会改变行数, 必须通知视图重置, 否则视图仍按旧行数绘制
+    beginResetModel();
     _pMinimumDate = minimudate;
     _initRowCount();
+    endResetModel();
 }
 
 QDate ElaCalendarModel::getMinimumDate() const
@@ -25,8 +28,11 @@ QDate ElaCalendarModel::getMinimumDate() const
 
 void ElaCalendarModel::setMaximumDate(QDate maximumDate)
 {
+    // 日期范围变化会改变行数, 必须通知视图重置, 否则视图仍按旧行数绘制
+    beginResetModel();
     _pMaximumDate = maximumDate;
     _initRowCount();
+    endResetModel();
 }
 
 QDate ElaCalendarModel::getMaximumDate() const

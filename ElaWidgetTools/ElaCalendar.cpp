@@ -14,7 +14,7 @@
 #include "ElaScrollBar.h"
 #include "ElaTheme.h"
 #include "ElaToolButton.h"
-Q_PROPERTY_CREATE_Q_CPP(ElaCalendar, int, BorderRaiuds)
+Q_PROPERTY_CREATE_Q_CPP(ElaCalendar, int, BorderRadius)
 ElaCalendar::ElaCalendar(QWidget* parent)
     : QWidget{parent}, d_ptr(new ElaCalendarPrivate())
 {
@@ -22,7 +22,7 @@ ElaCalendar::ElaCalendar(QWidget* parent)
     setFixedSize(305, 340);
     setObjectName("ElaCalendar");
     d->q_ptr = this;
-    d->_pBorderRaiuds = 5;
+    d->_pBorderRadius = 5;
 
     // 日历标题
     d->_calendarTitleView = new ElaBaseListView(this);
@@ -166,7 +166,7 @@ void ElaCalendar::paintEvent(QPaintEvent* event)
     baseRect.adjust(d->_borderWidth, d->_borderWidth, -d->_borderWidth, -d->_borderWidth);
     painter.setPen(Qt::NoPen);
     painter.setBrush(ElaThemeColor(d->_themeMode, DialogBase));
-    painter.drawRoundedRect(baseRect, d->_pBorderRaiuds, d->_pBorderRaiuds);
+    painter.drawRoundedRect(baseRect, d->_pBorderRadius, d->_pBorderRadius);
     // 缩放动画
     if (!d->_isSwitchAnimationFinished)
     {
@@ -182,7 +182,7 @@ void ElaCalendar::paintEvent(QPaintEvent* event)
     // 分割线
     painter.setPen(QPen(ElaThemeColor(d->_themeMode, BasicBorder), d->_borderWidth));
     painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(baseRect, d->_pBorderRaiuds, d->_pBorderRaiuds);
+    painter.drawRoundedRect(baseRect, d->_pBorderRadius, d->_pBorderRadius);
     painter.drawLine(QPointF(baseRect.x(), 45), QPointF(baseRect.right(), 45));
     painter.restore();
 }

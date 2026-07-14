@@ -3,8 +3,21 @@
 #include "DeveloperComponents/ElaSplitterHandle.h"
 #include "private/ElaSplitterPrivate.h"
 
-Q_PROPERTY_CREATE_Q_CPP(ElaSplitter, int, HandleWidth)
 Q_PROPERTY_CREATE_Q_CPP(ElaSplitter, int, GripLength)
+
+// HandleWidth 需同步到 QSplitter 基类才能改变实际手柄宽度, 不能使用 Q_PROPERTY_CREATE_Q_CPP 宏生成
+void ElaSplitter::setHandleWidth(int HandleWidth)
+{
+	Q_D(ElaSplitter);
+	d->_pHandleWidth = HandleWidth;
+	QSplitter::setHandleWidth(HandleWidth);
+	Q_EMIT pHandleWidthChanged();
+}
+
+int ElaSplitter::getHandleWidth() const
+{
+	return d_ptr->_pHandleWidth;
+}
 
 ElaSplitter::ElaSplitter(QWidget* parent)
 	: QSplitter(parent), d_ptr(new ElaSplitterPrivate())

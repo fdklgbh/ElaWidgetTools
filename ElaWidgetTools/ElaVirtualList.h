@@ -25,6 +25,7 @@ Q_SIGNALS:
 
 protected:
     virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 #endif // ELAVIRTUALLIST_H

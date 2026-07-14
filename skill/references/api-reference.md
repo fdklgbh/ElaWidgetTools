@@ -502,7 +502,7 @@
 
 | 类型 | 名称 | 读写 |
 |------|------|------|
-| `int` | `BorderRaiuds` | get/set |
+| `int` | `BorderRadius` | get/set |
 | `QDate` | `SelectedDate` | get/set |
 | `QDate` | `MinimumDate` | get/set |
 | `QDate` | `MaximumDate` | get/set |
