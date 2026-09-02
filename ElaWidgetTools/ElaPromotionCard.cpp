@@ -139,7 +139,16 @@ bool ElaPromotionCard::event(QEvent* event)
     }
     case QEvent::MouseButtonRelease:
     {
-        Q_EMIT promotionCardClicked();
+        QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        // 手势滚动接管后会补发控件外的释放事件, 此时不视为点击并恢复悬停状态
+        if (rect().contains(mouseEvent->pos()))
+        {
+            Q_EMIT promotionCardClicked();
+        }
+        else
+        {
+            d->_startHoverOpacityAnimation(false);
+        }
         break;
     }
     case QEvent::MouseMove:

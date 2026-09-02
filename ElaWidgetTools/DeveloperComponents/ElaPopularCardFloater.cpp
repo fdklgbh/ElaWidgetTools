@@ -2,6 +2,7 @@
 
 #include <QEvent>
 #include <QGraphicsOpacityEffect>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPropertyAnimation>
@@ -146,7 +147,16 @@ bool ElaPopularCardFloater::event(QEvent* event)
     }
     case QEvent::MouseButtonRelease:
     {
-        Q_EMIT _card->popularCardClicked();
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        // 手势滚动接管后会补发控件外的释放事件, 此时不视为点击并收起浮层
+        if (rect().contains(mouseEvent->pos()))
+        {
+            Q_EMIT _card->popularCardClicked();
+        }
+        else
+        {
+            hideFloater();
+        }
         break;
     }
     default:

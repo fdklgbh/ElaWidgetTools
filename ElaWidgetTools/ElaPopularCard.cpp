@@ -1,9 +1,9 @@
 #include "ElaPopularCard.h"
 
 #include <QEvent>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
-#include <QPropertyAnimation>
 #include <QTimer>
 
 #include "ElaPopularCardFloater.h"
@@ -34,6 +34,10 @@ ElaPopularCard::ElaPopularCard(QWidget* parent)
     d->_floater = new ElaPopularCardFloater(this, d, d->_pCardFloatArea);
     d->_floatTimer = new QTimer(this);
     connect(d->_floatTimer, &QTimer::timeout, d, &ElaPopularCardPrivate::_showFloater);
+    // 手势滚动等场景下 Leave 事件可能丢失, 由该定时器兜底恢复悬停状态
+    d->_hoverCheckTimer = new QTimer(this);
+    d->_hoverCheckTimer->setInterval(100);
+    connect(d->_hoverCheckTimer, &QTimer::timeout, d, &ElaPopularCardPrivate::_doHoverStateCheck);
 
     d->_themeMode = eTheme->getThemeMode();
     connect(eTheme, &ElaTheme::themeModeChanged, this, [=](ElaThemeType::ThemeMode themeMode) {
@@ -89,42 +93,29 @@ bool ElaPopularCard::event(QEvent* event)
     case QEvent::Enter:
     {
         d->_floatTimer->start(450);
-        QPropertyAnimation* hoverAnimation = new QPropertyAnimation(d, "pHoverYOffset");
-        connect(hoverAnimation, &QPropertyAnimation::valueChanged, this, [=]() {
-            update();
-        });
-        hoverAnimation->setDuration(130);
-        hoverAnimation->setStartValue(d->_pHoverYOffset);
-        hoverAnimation->setEndValue(6);
-        hoverAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-        QPropertyAnimation* opacityAnimation = new QPropertyAnimation(d, "pHoverOpacity");
-        opacityAnimation->setDuration(130);
-        opacityAnimation->setStartValue(d->_pHoverOpacity);
-        opacityAnimation->setEndValue(1);
-        opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+        d->_hoverCheckTimer->start();
+        d->_startHoverAnimation(true);
         break;
     }
     case QEvent::Leave:
     {
         d->_floatTimer->stop();
-        QPropertyAnimation* hoverAnimation = new QPropertyAnimation(d, "pHoverYOffset");
-        connect(hoverAnimation, &QPropertyAnimation::valueChanged, this, [=]() {
-            update();
-        });
-        hoverAnimation->setDuration(130);
-        hoverAnimation->setStartValue(d->_pHoverYOffset);
-        hoverAnimation->setEndValue(0);
-        hoverAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-        QPropertyAnimation* opacityAnimation = new QPropertyAnimation(d, "pHoverOpacity");
-        opacityAnimation->setDuration(130);
-        opacityAnimation->setStartValue(d->_pHoverOpacity);
-        opacityAnimation->setEndValue(0);
-        opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+        d->_startHoverAnimation(false);
         break;
     }
     case QEvent::MouseButtonRelease:
     {
-        Q_EMIT popularCardClicked();
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        // 手势滚动接管后会补发控件外的释放事件, 此时不视为点击并恢复悬停状态
+        if (rect().contains(mouseEvent->pos()))
+        {
+            Q_EMIT popularCardClicked();
+        }
+        else
+        {
+            d->_floatTimer->stop();
+            d->_startHoverAnimation(false);
+        }
         break;
     }
     default:

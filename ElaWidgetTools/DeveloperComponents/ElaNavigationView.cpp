@@ -64,7 +64,9 @@ ElaNavigationView::ElaNavigationView(QWidget* parent)
         }
         else if (newstate == QScroller::Scrolling || newstate == QScroller::Inactive)
         {
+            // 光标移出控件后松开鼠标时同样需要重绘, 否则按下态残留
             _navigationStyle->setPressIndex(QModelIndex());
+            viewport()->update();
         }
     });
 
@@ -129,6 +131,7 @@ void ElaNavigationView::mouseReleaseEvent(QMouseEvent* event)
             Q_EMIT navigationClicked(index);
         }
         _navigationStyle->setPressIndex(QModelIndex());
+        viewport()->update();
     }
 }
 

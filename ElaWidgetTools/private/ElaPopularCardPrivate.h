@@ -5,6 +5,7 @@
 #include <QPixmap>
 
 #include "ElaDef.h"
+class QTimer;
 class ElaPopularCard;
 class ElaPopularCardFloater;
 class ElaPopularCardPrivate : public QObject
@@ -31,6 +32,7 @@ private:
     friend class ElaPopularCardFloater;
     ElaThemeType::ThemeMode _themeMode;
     QTimer* _floatTimer{nullptr};
+    QTimer* _hoverCheckTimer{nullptr};
     ElaPopularCardFloater* _floater{nullptr};
     bool _isFloating{false};
     int _shadowBorderWidth{6};
@@ -40,6 +42,8 @@ private:
     QRect _buttonTargetRect;
 
     void _showFloater();
+    void _startHoverAnimation(bool isHover);
+    void _doHoverStateCheck();
 };
 
 #endif // ELAPOPULARCARDPRIVATE_H

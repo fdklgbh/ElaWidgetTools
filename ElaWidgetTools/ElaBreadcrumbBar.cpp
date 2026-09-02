@@ -67,7 +67,9 @@ ElaBreadcrumbBar::ElaBreadcrumbBar(QWidget* parent)
         }
         else if (newstate == QScroller::Scrolling || newstate == QScroller::Inactive)
         {
+            // 光标移出控件后松开鼠标时同样需要重绘, 否则按下态残留
             d->_listDelegate->setPressIndex(QModelIndex());
+            d->_listView->viewport()->update();
         }
     });
 
